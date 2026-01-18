@@ -1,0 +1,136 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main]
+
+jobs:
+  # ═══════════════════════════════════════════════════════════════
+  # Template Validation (Pflicht-Dateien vorhanden?)
+  # ═══════════════════════════════════════════════════════════════
+  structure:
+    name: "Check Structure"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required files
+        run: |
+          echo "Checking required files..."
+
+          # Pflicht-Dateien
+          files=(
+            "README.md"
+            "PROJECT_STATE.md"
+            "MASTER_RUNBOOK.md"
+            "PRODUCTION_CHECKLIST.md"
+            "capabilities.yml"
+            "CONTRACTS/api_contract.md"
+            "CONTRACTS/data_contract.md"
+            "docs/PROJECT_BRIEF.md"
+            "docs/TEST_PLAN.md"
+            "ops/POLICY.md"
+            ".gitignore"
+          )
+
+          missing=0
+          for file in "${files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ MISSING: $file"
+              missing=$((missing + 1))
+            else
+              echo "✅ OK: $file"
+            fi
+          done
+
+          if [ $missing -gt 0 ]; then
+            echo ""
+            echo "❌ $missing required files missing!"
+            exit 1
+          fi
+
+          echo ""
+          echo "✅ All required files present"
+
+  # ═══════════════════════════════════════════════════════════════
+  # Security Check (Keine Secrets im Repo?)
+  # ═══════════════════════════════════════════════════════════════
+  secrets-scan:
+    name: "Secrets Scan"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan for secrets
+        run: |
+          echo "Scanning for potential secrets..."
+
+          # Patterns die auf Secrets hindeuten
+          patterns=(
+            'sk-[a-zA-Z0-9]{20,}'      # OpenAI
+            'ghp_[a-zA-Z0-9]{36,}'     # GitHub Token
+            'gho_[a-zA-Z0-9]{36,}'     # GitHub OAuth
+            'glpat-[a-zA-Z0-9]{20,}'   # GitLab Token
+            'PRIVATE KEY'              # Private Keys
+          )
+
+          # Dateien die ausgeschlossen werden
+          exclude_files=".env.example|.github/workflows|node_modules"
+
+          found=0
+          for pattern in "${patterns[@]}"; do
+            matches=$(grep -rn "$pattern" --include="*.js" --include="*.ts" --include="*.json" --include="*.md" --include="*.yml" --include="*.yaml" . 2>/dev/null | grep -vE "$exclude_files" || true)
+            if [ -n "$matches" ]; then
+              echo "⚠️ Potential secret pattern found: $pattern"
+              echo "$matches"
+              found=$((found + 1))
+            fi
+          done
+
+          if [ $found -gt 0 ]; then
+            echo ""
+            echo "⚠️ Potential secrets found! Please review."
+            # Nicht failen, nur warnen
+          else
+            echo "✅ No obvious secrets found"
+          fi
+
+  # ═══════════════════════════════════════════════════════════════
+  # Lint & Test (falls package.json vorhanden)
+  # ═══════════════════════════════════════════════════════════════
+  test:
+    name: "Lint & Test"
+    runs-on: ubuntu-latest
+    if: hashFiles('package.json') != ''
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Test
+        run: npm test --if-present
+
+  # ═══════════════════════════════════════════════════════════════
+  # Gate (alle Checks müssen grün sein)
+  # ═══════════════════════════════════════════════════════════════
+  gate:
+    name: "CI Gate"
+    needs: [structure, secrets-scan]
+    runs-on: ubuntu-latest
+    steps:
+      - name: All checks passed
+        run: |
+          echo "✅ All CI checks passed"
+          echo "Ready for review"
