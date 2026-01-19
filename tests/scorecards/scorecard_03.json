@@ -1,0 +1,10 @@
+{
+  "agent_id": "AGENT_003",
+  "contact_name": "Kunde_3",
+  "timestamp": "2025-12-21T15:32:05.144000",
+  "price_claim": true,
+  "legal_claim": false,
+  "stop_triggered": false,
+  "placeholder_used": false,
+  "risk": 2
+}

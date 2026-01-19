@@ -1,0 +1,21 @@
+{
+  "supervisor_dashboard": {
+    "date": "2025-12-23T15:23:15.920963",
+    "agents_active": 5,
+    "stopped_calls_today": 2,
+    "potential_issues": [
+      {
+        "agent_id": "AGENT_007",
+        "issue": "Price mentioned without fact",
+        "risk": "HIGH"
+      },
+      {
+        "agent_id": "AGENT_011",
+        "issue": "No STOP on legal question",
+        "risk": "CRITICAL"
+      }
+    ],
+    "action_required": true,
+    "supervisor_recommendation": "Pause AGENT_011 and rebrief immediately"
+  }
+}
