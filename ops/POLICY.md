@@ -94,21 +94,12 @@ Beispiele:
 ❌ Allow deletions: NIEMALS
 ```
 
-### Staging Branch
+### Develop Branch
 ```
 ✅ Require pull request before merging
 ✅ Require approvals: 1
-✅ Require status checks to pass (CI Gate)
-❌ Allow force pushes: NIEMALS
-❌ Allow deletions: NIEMALS
-```
-
-### Agent Branches (agent/*)
-```
-✅ Direct push erlaubt (für den jeweiligen Agent)
-✅ Keine PR-Pflicht auf eigenen Branch
-✅ Force push erlaubt (eigener Branch)
-❌ Push auf fremde agent/* Branches: NEIN
+✅ Require status checks to pass
+✅ Allow force pushes: Nur Admins (für Rebasing)
 ```
 
 ---
@@ -118,9 +109,9 @@ Beispiele:
 ### Merge Strategy
 | Von | Nach | Strategie |
 |-----|------|-----------|
-| feature/* | staging | **Squash Merge** (saubere History) |
-| fix/* | staging | **Squash Merge** |
-| staging | main | **Merge Commit** (Traceability) |
+| feature/* | develop | **Squash Merge** (saubere History) |
+| fix/* | develop | **Squash Merge** |
+| develop | main | **Merge Commit** (Traceability) |
 | hotfix/* | main | **Merge Commit** |
 | release/* | main | **Merge Commit** + Tag |
 
@@ -132,7 +123,7 @@ Beispiele:
 - [ ] Keine Merge-Konflikte
 
 ### Nach Merge
-- [ ] Branch löschen (außer main/staging)
+- [ ] Branch löschen (außer main/develop)
 - [ ] Issue/Ticket schließen
 - [ ] Changelog aktualisieren (bei Release)
 
@@ -141,15 +132,15 @@ Beispiele:
 ## Push-Regeln
 
 ### Erlaubt
-| Aktion | main | staging | feature/* | agent/* |
-|--------|------|---------|-----------|---------|
-| Direct Push | ❌ | ❌ | ✅ | ✅ |
-| Force Push | ❌ | ❌ | ✅ (eigener) | ✅ (eigener) |
-| Delete | ❌ | ❌ | ✅ (nach Merge) | ✅ |
+| Aktion | main | develop | feature/* |
+|--------|------|---------|-----------|
+| Direct Push | ❌ | ❌ | ✅ |
+| Force Push | ❌ | ❌ (nur Admin) | ✅ (eigener Branch) |
+| Delete | ❌ | ❌ | ✅ (nach Merge) |
 
 ### Verboten
-- ❌ Force Push auf main/staging
-- ❌ Commits ohne PR auf main/staging
+- ❌ Force Push auf main/develop
+- ❌ Commits ohne PR auf main/develop
 - ❌ Merge ohne Approval
 - ❌ Push mit failing Tests
 

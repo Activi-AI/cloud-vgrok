@@ -245,29 +245,7 @@ RATE_LIMIT_MAX=100
 
 ---
 
-## 10. Benutzeranleitungen (PFLICHT)
-
-### 10.1 Quick Start Guide
-- [ ] `guides/QUICK_START.md` existiert
-- [ ] Keine Platzhalter mehr (alle [Text] ersetzt)
-- [ ] Echte Screenshots eingefügt
-- [ ] Schritt-für-Schritt Anleitung vollständig
-
-### 10.2 Feature Guides
-- [ ] Für jede Hauptfunktion eine Anleitung
-- [ ] Bilder/Screenshots in `guides/assets/`
-- [ ] Einfache Sprache (für Endbenutzer)
-- [ ] Beispiele aus der Praxis
-
-### 10.3 Guide Qualität
-- [ ] Max. 2-3 Seiten pro Guide
-- [ ] Nummerierte Schritte
-- [ ] Häufige Fragen beantwortet
-- [ ] Support-Kontakt angegeben
-
----
-
-## 11. Monitoring (EMPFOHLEN)
+## 10. Monitoring (EMPFOHLEN)
 
 ### 10.1 Error Tracking
 - [ ] Sentry oder ähnlich integriert
@@ -319,11 +297,6 @@ TESTS:
 [ ] Unit Tests ✓
 [ ] Integration Tests ✓
 [ ] CI/CD Pipeline ✓
-
-USER GUIDES:
-[ ] Quick Start Guide ✓
-[ ] Feature Guides ✓
-[ ] Screenshots vorhanden ✓
 ```
 
 ---
