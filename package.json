@@ -1,0 +1,24 @@
+{
+  "name": "cloud-vgrok",
+  "version": "1.0.0",
+  "description": "Unified Cloud Assistant - Personal AI with 7 Agents, macOS App, Dashboard, and Automation",
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:dashboard": "cd apps/dashboard && pnpm dev",
+    "dev:supervisor": "cd apps/supervisor-api && pnpm dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "infra:up": "cd infra && docker compose up -d",
+    "infra:down": "cd infra && docker compose down",
+    "infra:logs": "cd infra && docker compose logs -f"
+  },
+  "keywords": ["agent", "automation", "ai", "cloud", "macos", "assistant"],
+  "author": "activi-dev",
+  "license": "MIT",
+  "packageManager": "pnpm@10.27.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
